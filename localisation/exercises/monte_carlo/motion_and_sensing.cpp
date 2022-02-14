@@ -224,30 +224,33 @@ void visualization(int n, Robot robot, int step, Robot p[], Robot pr[])
 }
 */
 
-//####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 int main()
 {
-    // TODO: Instantiate a robot object from the Robot class
+    //Practice Interfacing with Robot Class
     Robot myrobot;
-    // TODO: Simulate Noise
-    // Forward Noise=5.0, Turn Noise=0.1,Sense Noise=5.0
-    myrobot.set_noise(5.0,0.1,5.0);
-    // TODO: Set robot new position to x=30.0, y=50.0 and orientation=PI/2
-    myrobot.set(30.0,50.0,M_PI/2);
+    myrobot.set_noise(5.0, 0.1, 5.0);
+    myrobot.set(30.0, 50.0, M_PI / 2.0);
+    myrobot.move(-M_PI / 2.0, 15.0);
+    //cout << myrobot.read_sensors() << endl;
+    myrobot.move(-M_PI / 2.0, 10.0);
+    //cout << myrobot.read_sensors() << endl;
 
+    //####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 
-    // TODO: Turn clockwise by PI/2 and move by 15 meters
-    myrobot.move(M_PI/2,15);
-
-    // TODO: Print the distance from the robot toward the eight landmarks
-    std::cout << myrobot.read_sensors() << std::endl;
-
-    // TODO: Turn clockwise by PI/2 and move by 10 meters
-    myrobot.move(M_PI/2,10);
-
-    // TODO: Print the distance from the robot toward the eight landmarks
-    std::cout << myrobot.read_sensors() << std::endl;
-
+    // Instantiating 1000 Particles each with a random position and orientation
+    int n = 1000;
+    Robot p[n];
+    //TODO: Your job is to loop over the set of particles
+    //TODO: For each particle add noise: Forward_Noise=0.05, Turn_Noise=0.05, and Sense_Noise=5.0
+    //TODO: And print its pose on a single line
+    for(int i=0;i<n;i++){
+        p[i].set_noise(0.05,0.05,5.0);
+        
+        cout<<p[i].show_pose() <<endl;
+    }
+    
+    
+    
+    
     return 0;
-
 }

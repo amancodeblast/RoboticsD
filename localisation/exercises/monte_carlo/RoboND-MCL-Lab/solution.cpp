@@ -1,12 +1,13 @@
-//#include "src/matplotlibcpp.h"//Graph Library
+//Compile with: g++ solution.cpp -o app -std=c++11 -I/usr/include/python2.7 -lpython2.7
+#include "src/matplotlibcpp.h" //Graph Library
 #include <iostream>
 #include <string>
 #include <math.h>
-#include <vector>
 #include <stdexcept> // throw errors
 #include <random> //C++ 11 Random Numbers
+#include <vector>
 
-//namespace plt = matplotlibcpp;
+namespace plt = matplotlibcpp;
 using namespace std;
 
 // Landmarks
@@ -190,11 +191,11 @@ double max(double arr[], int n)
     }
     return max;
 }
-/*
+
 void visualization(int n, Robot robot, int step, Robot p[], Robot pr[])
 {
-	//Draw the robot, landmarks, particles and resampled particles on a graph
-	
+    //Draw the robot, landmarks, particles and resampled particles on a graph
+
     //Graph Format
     plt::title("MCL, step " + to_string(step));
     plt::xlim(0, 100);
@@ -214,15 +215,14 @@ void visualization(int n, Robot robot, int step, Robot p[], Robot pr[])
     for (int i = 0; i < sizeof(landmarks) / sizeof(landmarks[0]); i++) {
         plt::plot({ landmarks[i][0] }, { landmarks[i][1] }, "ro");
     }
-    
+
     //Draw robot position in blue
     plt::plot({ robot.x }, { robot.y }, "bo");
 
-	//Save the image and close the plot
+    //Save the image and close the plot
     plt::save("./Images/Step" + to_string(step) + ".png");
     plt::clf();
 }
-*/
 
 int main()
 {
@@ -285,19 +285,20 @@ int main()
             }
             p3[i] = p[index];
         }
-        for (int k=0; k < n; k++) {
+        for (int k = 0; k < n; k++) {
             p[k] = p3[k];
             //cout << p[k].show_pose() << endl;
         }
 
-        //####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
-        
-        // TODO: Evaluate the error by priting it in this form:
-        double ErrorValue=evaluation(myrobot,p,n);
-        cout << "Step = " << t << ", Evaluation = " << ErrorValue << endl;
-        
+        //Evaluate the Error
+        cout << "Step = " << t << ", Evaluation = " << evaluation(myrobot, p, n) << endl;
 
+        //####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
+
+        //Graph the position of the robot and the particles at each step
+        visualization(n, myrobot, t, p2, p3);
 
     } //End of Steps loop
+
     return 0;
 }

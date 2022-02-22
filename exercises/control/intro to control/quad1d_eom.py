@@ -1,13 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from open_controller import Open_Controller
+from p_controller import P_Controller
 
 ##################################################################################
 ## DO NOT MODIFY ANY PORTION OF THIS FILE
 # This file represents the dynamical equations of motion for the 1D quadrotor
 ##################################################################################
 
-def ydot(y, t, controller):
+def ydot(y, t, p):
     ''' Returns the state vector at the next time-step
 
     Parameters:
@@ -33,11 +33,12 @@ def ydot(y, t, controller):
     c =  10.0 # electro-mechanical transmission constant
 
     # time step, (sec)
-    dt = t - controller.last_timestamp_
+    dt = t - p.last_timestamp_
     # Control effort
-    u = controller.getControlEffort(t)
+    u = p.update(y0,t)
 
     ### State derivatives
+    # if altitude = 0
     if (y0 <= 0.):
         # if control input, u <= gravity, vehicle stays at rest on the ground
         # this prevents quadrotor from "falling" through the ground when thrust is

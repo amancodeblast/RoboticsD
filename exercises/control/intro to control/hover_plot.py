@@ -1,18 +1,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from open_controller import Open_Controller
+from p_controller import P_Controller
 from quad1d_eom import ydot
 
 ##################################################################################
 ##################################################################################
-# Here we are going to apply a continuous and constant control effort with a value 
-# of 1.7!
-control_effort = 1.7
+# This code is what will be executed and what will produce your results
+# For this quiz you need to set kp below to your desired value
+# Then modify p_controller.py to build out your P controller
+kp = 0.76 # value 15 has been set based on the hover_plot_optimise.py and results.csv created by it 
+# Note that kp needs to be set to 0.76 in order to pass the project
+# You are encouraged to change Kp in order to observe the effects
+# What happens when Kp is really small?
+# What happens when Kp is really large?
+# Do we notice anything relating Kp and the control effort?
+# Observe the steady state offset and the percent overshoot!
 ##################################################################################
 ##################################################################################
 
 # Simulation parameters
-N = 500 # number of simulation points
+N = 500 # number of simultion points
 t0 = 0  # starting time, (sec)
 tf = 30 # end time, (sec)
 time = np.linspace(t0, tf, N)
@@ -28,28 +35,27 @@ y = [0, 0]
 # Initialize array to store values
 soln = np.zeros((len(time),len(y)))
 
-# Create instance of Open_Controller class
-controller = Open_Controller()
+# Create instance of P_Controller class
+p = P_Controller()
 
-# Set our contstant control effort
-controller.setControlEffort(control_effort)
+# Set the Kp value of the controller
+p.setKP(kp)
 
 # Set altitude target
 r = 10 # meters
-controller.setTarget(r)
+p.setTarget(r)
 
 # Simulate quadrotor motion
 j = 0 # dummy counter
 for t in time:
     # Evaluate state at next time point
-    y = ydot(y,t,controller)
+    y = ydot(y,t,p)
     # Store results
     soln[j,:] = y
     j += 1
 
 ##################################################################################
 # Plot results
-# Plot 1: This is the altitude of our quad copter as a function of time!
 SP = np.ones_like(time)*r # altitude set point
 fig = plt.figure()
 ax1 = fig.add_subplot(211)
@@ -57,7 +63,6 @@ ax1.plot(time, soln[:,0],time,SP,'--')
 ax1.set_xlabel('Time, (sec)')
 ax1.set_ylabel('Altitude, (m)')
 
-# Plot 2: This is the speed of our quad copter as a function of time!
 ax2 = fig.add_subplot(212)
 ax2.plot(time, soln[:,1])
 ax2.set_xlabel('Time, (sec)')
@@ -65,10 +70,9 @@ ax2.set_ylabel('Speed, (m/s)')
 plt.tight_layout()
 plt.show()
 
-# Plot 3: This is the control effort applied to our quad copter as a function of time!
 fig2 = plt.figure()
 ax3 = fig2.add_subplot(111)
-ax3.plot(time, controller.effort_applied, label='effort', linewidth=3, color = 'red')
+ax3.plot(time, p.u_p, label='u_p', linewidth=3, color = 'red')
 ax3.set_xlabel('Time, (sec)')
 ax3.set_ylabel('Control Effort')
 h, l = ax3.get_legend_handles_labels()
@@ -86,4 +90,4 @@ if OS < 0:
     OS = 0
 print("The percent overshoot is {0:.1f}%".format(OS))
 
-print ("The offset from the target at 30 seconds is {0:.3f} meters".format(abs(soln[-1,0]-r)))
+print ("The steady state offset at 30 seconds is {0:.3f} meters".format(abs(soln[-1,0]-r)))
